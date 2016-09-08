@@ -11,8 +11,8 @@
 
 typedef struct {
     char ppmType;
-    int imageWidth;
-    int imageHeight;
+    unsigned int imageWidth;
+    unsigned int imageHeight;
 } PpmHeader;
 
 /**
