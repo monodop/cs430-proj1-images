@@ -3,5 +3,5 @@ project(cs430_proj1_images)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.c header.c header.h)
+set(SOURCE_FILES main.c header.c header.h helpers.c helpers.h)
 add_executable(cs430_proj1_images ${SOURCE_FILES})

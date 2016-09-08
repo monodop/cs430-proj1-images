@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include "header.h"
+#include "helpers.h"
 
 #define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM headers. The provided file is either not a PPM P3/P6 file or has been corrupted.\n"
 #define INVALID_WIDTH_ERROR_MESSAGE "PPM file contained an invalid width.\n"
@@ -34,7 +35,8 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
         headerData->ppmType = 6;
 
     // Get the image width
-    count = fscanf(filePointer, " %u ", &nextNumber);
+    skip_ignored_characters(filePointer);
+    count = fscanf(filePointer, "%u", &nextNumber);
     if (count == 0 || count == EOF) {
         printf(INVALID_FILE_ERROR_MESSAGE);
         printf(INVALID_WIDTH_ERROR_MESSAGE);
@@ -43,7 +45,8 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     headerData->imageWidth = nextNumber;
 
     // Get the image height
-    count = fscanf(filePointer, " %u ", &nextNumber);
+    skip_ignored_characters(filePointer);
+    count = fscanf(filePointer, "%u", &nextNumber);
     if (count == 0 || count == EOF) {
         printf(INVALID_FILE_ERROR_MESSAGE);
         printf(INVALID_HEIGHT_ERROR_MESSAGE);
