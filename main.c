@@ -4,6 +4,7 @@
 
 #include "header.h"
 #include "helpers.h"
+#include "ppm3.h"
 
 /**
  * Displays the usage information and returns an error exit code
@@ -55,6 +56,19 @@ int main(int argc, char* argv[]) {
 
     // Create the pixel grid in memory
     pixelGrid = malloc(sizeof(Color) * fileHeader.imageWidth * fileHeader.imageHeight);
+
+    // Read the data into the grid
+    switch (fileHeader.ppmType) {
+        case 3:
+            if (!ppm3_parse_data(filePointer, &fileHeader, pixelGrid)) {
+                fprintf(stderr, "Unable to continue reading the image file.\n");
+                return displayUsage();
+            }
+            break;
+        default:
+            fprintf(stderr, "Unsupported ppm type (must be P3 or P6), unable to read the image.");
+            return displayUsage();
+    }
 
     // Close input file
     fclose(filePointer);
