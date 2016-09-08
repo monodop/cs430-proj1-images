@@ -13,6 +13,7 @@ typedef struct {
     char ppmType;
     unsigned int imageWidth;
     unsigned int imageHeight;
+    unsigned short maxVal;
 } PpmHeader;
 
 /**

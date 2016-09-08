@@ -45,7 +45,11 @@ int main(int argc, char* argv[]) {
         printf("Unable to continue processing image file.\n");
         return displayUsage();
     }
-    printf("Detected file with dimensions %d x %d of type P%d.\n", inputHeaderInformation.imageWidth, inputHeaderInformation.imageHeight, inputHeaderInformation.ppmType);
+    printf("Detected file with dimensions %u x %u of type P%d, maxval=%hu.\n",
+           inputHeaderInformation.imageWidth,
+           inputHeaderInformation.imageHeight,
+           inputHeaderInformation.ppmType,
+           inputHeaderInformation.maxVal);
 
     // Close input file
     fclose(filePointer);
