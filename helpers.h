@@ -7,6 +7,12 @@
 
 #include <stdio.h>
 
+typedef struct {
+    double r, g, b;
+} Color;
+
+typedef Color* ColorRef;
+
 /**
  * Peeks the next character in the provided stream
  * @param fp - The file stream to peek into
