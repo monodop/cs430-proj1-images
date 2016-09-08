@@ -45,3 +45,12 @@ int skip_ignored_characters(FILE* fp) {
     }
     return count;
 }
+
+int wxy_to_index(int width, int x, int y) {
+    return x + y*width;
+}
+
+void index_to_xwy(int index, int width, int* x, int* y) {
+    *x = index % width;
+    *y = index / width;
+}
