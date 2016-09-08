@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     // Validate target format parameter
     targetFormat = atoi(argv[1]);
     if (targetFormat != 3 && targetFormat != 6) {
-        printf("Invalid parameter target_format = '%s', expected 3 or 6.\n", argv[1]);
+        fprintf(stderr, "Invalid parameter target_format = '%s', expected 3 or 6.\n", argv[1]);
         return displayUsage();
     }
 
@@ -38,13 +38,13 @@ int main(int argc, char* argv[]) {
     printf("Processing input file.\n");
     filePointer = fopen(inputFilename, "r");
     if (filePointer == NULL) {
-        printf("File '%s' does not exist or cannot be opened. Error number %d.\n", inputFilename, errno);
+        fprintf(stderr, "File '%s' does not exist or cannot be opened. Error number %d.\n", inputFilename, errno);
         return displayUsage();
     }
 
     // Read input image file's headers
     if (!header_read(filePointer, &fileHeader)) {
-        printf("Unable to continue processing image file.\n");
+        fprintf(stderr, "Unable to continue processing image file.\n");
         return displayUsage();
     }
     printf("Detected file with dimensions %u x %u of type P%d, maxval=%hu.\n",
@@ -67,9 +67,9 @@ int main(int argc, char* argv[]) {
 }
 
 int displayUsage() {
-    printf("Usage: ppmrw target_format input_filename output_filename\n");
-    printf(" - target_format: The PX format that the output file should be converted to. Valid options are 3 or 6.\n");
-    printf(" - input_filename: The name of the ppm file that will be converted.\n");
-    printf(" - output_filename: The name of the ppm file that will be created in the target format.\n");
+    fprintf(stderr, "Usage: ppmrw target_format input_filename output_filename\n");
+    fprintf(stderr, " - target_format: The PX format that the output file should be converted to. Valid options are 3 or 6.\n");
+    fprintf(stderr, " - input_filename: The name of the ppm file that will be converted.\n");
+    fprintf(stderr, " - output_filename: The name of the ppm file that will be created in the target format.\n");
     return 1;
 }

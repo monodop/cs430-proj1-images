@@ -19,14 +19,14 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     // Check first part of magic number
     nextChar = getc(filePointer);
     if (nextChar != 'P') {
-        printf(INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
         return 0;
     }
 
     // Check second part of magic number
     nextChar = getc(filePointer);
     if (nextChar != '3' && nextChar != '6') {
-        printf(INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
         return 0;
     }
 
@@ -40,8 +40,8 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     skip_ignored_characters(filePointer);
     count = fscanf(filePointer, "%u", &nextNumber);
     if (count == 0 || count == EOF) {
-        printf(INVALID_FILE_ERROR_MESSAGE);
-        printf(INVALID_WIDTH_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_WIDTH_ERROR_MESSAGE);
         return 0;
     }
     headerData->imageWidth = nextNumber;
@@ -50,8 +50,8 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     skip_ignored_characters(filePointer);
     count = fscanf(filePointer, "%u", &nextNumber);
     if (count == 0 || count == EOF) {
-        printf(INVALID_FILE_ERROR_MESSAGE);
-        printf(INVALID_HEIGHT_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_HEIGHT_ERROR_MESSAGE);
         return 0;
     }
     headerData->imageHeight = nextNumber;
@@ -60,8 +60,8 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     skip_ignored_characters(filePointer);
     count = fscanf(filePointer, "%hu", &nextShort);
     if (count == 0 || count == EOF) {
-        printf(INVALID_FILE_ERROR_MESSAGE);
-        printf(INVALID_MAXVAL_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_MAXVAL_ERROR_MESSAGE);
         return 0;
     }
     headerData->maxVal = nextShort;
