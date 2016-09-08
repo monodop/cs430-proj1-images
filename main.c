@@ -3,6 +3,7 @@
 #include <errno.h>
 
 #include "header.h"
+#include "helpers.h"
 
 /**
  * Displays the usage information and returns an error exit code
@@ -16,7 +17,8 @@ int main(int argc, char* argv[]) {
     char* inputFilename;
     char* outputFilename;
     FILE *filePointer;
-    PpmHeader inputHeaderInformation;
+    PpmHeader fileHeader;
+    ColorRef pixelGrid;
 
     // Validate argument count
     if (argc != 4)
@@ -41,19 +43,25 @@ int main(int argc, char* argv[]) {
     }
 
     // Read input image file's headers
-    if (!header_read(filePointer, &inputHeaderInformation)) {
+    if (!header_read(filePointer, &fileHeader)) {
         printf("Unable to continue processing image file.\n");
         return displayUsage();
     }
     printf("Detected file with dimensions %u x %u of type P%d, maxval=%hu.\n",
-           inputHeaderInformation.imageWidth,
-           inputHeaderInformation.imageHeight,
-           inputHeaderInformation.ppmType,
-           inputHeaderInformation.maxVal);
+           fileHeader.imageWidth,
+           fileHeader.imageHeight,
+           fileHeader.ppmType,
+           fileHeader.maxVal);
+
+    // Create the pixel grid in memory
+    pixelGrid = malloc(sizeof(Color) * fileHeader.imageWidth * fileHeader.imageHeight);
 
     // Close input file
     fclose(filePointer);
     printf("Input file processed.\n");
+
+    // Deallocate the pixel grid
+    free(pixelGrid);
 
     return 0;
 }
