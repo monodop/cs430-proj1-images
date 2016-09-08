@@ -1,23 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 int displayUsage();
 
 int main(int argc, char* argv[]) {
+
+    int targetFormat;
+    char* inputFilename;
+    char* outputFilename;
+    FILE *filePointer;
 
     // Validate argument count
     if (argc != 4)
         return displayUsage();
 
     // Validate target format parameter
-    int targetFormat = atoi(argv[1]);
+    targetFormat = atoi(argv[1]);
     if (targetFormat != 3 && targetFormat != 6) {
         printf("Invalid parameter target_format = '%s', expected 3 or 6.\n", argv[1]);
         return displayUsage();
     }
 
-    char* inputFilename = argv[2];
-    char* outputFilename = argv[3];
+    inputFilename = argv[2];
+    outputFilename = argv[3];
+
+    // Open file
+    printf("Processing input file.\n");
+    filePointer = fopen(inputFilename, "r");
+    if (filePointer == NULL) {
+        printf("File '%s' does not exist or cannot be opened. Error number %d.\n", inputFilename, errno);
+        return displayUsage();
+    }
+
+    fclose(filePointer);
+    printf("Input file processed.\n");
 
     return 0;
 }
