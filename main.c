@@ -14,6 +14,8 @@ int displayUsage();
 
 int main(int argc, char* argv[]) {
 
+    /* - - - - - - Setup - - - - - - */
+
     int targetFormat;
     char* inputFilename;
     char* outputFilename;
@@ -34,6 +36,8 @@ int main(int argc, char* argv[]) {
 
     inputFilename = argv[2];
     outputFilename = argv[3];
+
+    /* - - - - - - Read Data - - - - - - */
 
     // Open input file
     printf("Processing input file.\n");
@@ -74,8 +78,28 @@ int main(int argc, char* argv[]) {
     fclose(filePointer);
     printf("Input file processed.\n");
 
+    /* - - - - - - Write Data - - - - - - */
+
+    // Open / Clear output file
+    printf("Opening output file for writing.\n");
+    filePointer = fopen(outputFilename, "w+");
+    if (filePointer == NULL) {
+        fprintf(stderr, "File '%s' cannot be opened for writing. Error number %d.\n", outputFilename, errno);
+        return displayUsage();
+    }
+
+    // Write output image file's headers
+    if (!header_write(filePointer, &fileHeader)) {
+        fprintf(stderr, "Unable to write to image file. Operation aborted.\n");
+        return displayUsage();
+    }
+
     // Deallocate the pixel grid
     free(pixelGrid);
+
+    // Close output file
+    fclose(filePointer);
+    printf("Output file processed.\n");
 
     return 0;
 }

@@ -25,4 +25,12 @@ typedef struct {
  */
 int header_read(FILE* filePointer, PpmHeaderRef headerData);
 
+/**
+ * Writes ppm header information to the provided file pointer.
+ * @param filePointer - The file pointer of the image file to write to
+ * @param headerData - The data to write
+ * @return 1 if success, 0 if failure
+ */
+int header_write(FILE* filePointer, PpmHeaderRef headerData);
+
 #endif //CS430_PROJ1_IMAGES_HEADER_H

@@ -67,3 +67,17 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     headerData->maxVal = nextShort;
     return 1;
 }
+
+int header_write(FILE* filePointer, PpmHeaderRef headerData) {
+
+    // Write magic number
+    fprintf(filePointer, "P%d\n", headerData->ppmType);
+
+    // Write length and width
+    fprintf(filePointer, "%d %d\n", headerData->imageWidth, headerData->imageHeight);
+
+    // Write max value
+    fprintf(filePointer, "%d\n", headerData->maxVal);
+
+    return 1;
+}
