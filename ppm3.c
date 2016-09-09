@@ -3,6 +3,7 @@
 //
 
 #include "ppm3.h"
+#include "header.h"
 
 #define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM3 data. Unexpected EOF."
 
@@ -49,7 +50,6 @@ int ppm3_read_triple(FILE* filePointer, unsigned short maxValue, ColorRef color)
 
 int ppm3_parse_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) {
     int i, arrLength = header->imageHeight * header->imageWidth;
-    unsigned short nextValue;
 
     // Loop through each position, parse the triple to it
     for (i = 0; i < arrLength; i++) {
@@ -57,4 +57,26 @@ int ppm3_parse_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) 
             return 0;
         }
     }
+
+    return 1;
+}
+
+int ppm3_write_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) {
+    int x = 0, i, arrLength = header->imageHeight * header->imageWidth;
+
+    // Write the color values
+    for (i = 0; i < arrLength; i++) {
+        fprintf(filePointer, "%d %d %d ",
+                (int)(colorGrid[i].r * header->maxVal),
+                (int)(colorGrid[i].g * header->maxVal),
+                (int)(colorGrid[i].b * header->maxVal)
+        );
+        x++;
+        if (x == header->imageWidth) {
+            x = 0;
+            fprintf(filePointer, "\n");
+        }
+    }
+
+    return 1;
 }

@@ -19,4 +19,14 @@
  */
 int ppm3_parse_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid);
 
+/**
+ * Provided a file stream, a PpmHeader, and a grid of colors, this function writes the color data to the file.
+ * This function does not write the file headers
+ * @param filePointer - The file stream to write to
+ * @param header - The header information
+ * @param colorGrid - The array of colors that will be written
+ * @return 1 if success, 0 if failure
+ */
+int ppm3_write_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid);
+
 #endif //CS430_PROJ1_IMAGES_PPM3_H

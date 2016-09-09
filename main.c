@@ -89,9 +89,23 @@ int main(int argc, char* argv[]) {
     }
 
     // Write output image file's headers
+    fileHeader.ppmType = (char)targetFormat;
     if (!header_write(filePointer, &fileHeader)) {
         fprintf(stderr, "Unable to write to image file. Operation aborted.\n");
         return displayUsage();
+    }
+
+    // Write the data in the grid to the file
+    switch (targetFormat) {
+        case 3:
+            if (!ppm3_write_data(filePointer, &fileHeader, pixelGrid)) {
+                fprintf(stderr, "Unable to continue writing the image file.\n");
+                return displayUsage();
+            }
+            break;
+        default:
+            fprintf(stderr, "Unsupported output ppm type (must be P3 or P6), unable to write the image");
+            return displayUsage();
     }
 
     // Deallocate the pixel grid
