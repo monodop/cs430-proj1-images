@@ -5,7 +5,7 @@
 #include "ppm3.h"
 #include "header.h"
 
-#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM3 data. Unexpected EOF."
+#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM3 data. Unexpected EOF.\n"
 
 /**
  * Reads a set of 3 values from the input filestream and stores it in the provided ColorRef

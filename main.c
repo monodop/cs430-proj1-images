@@ -5,6 +5,7 @@
 #include "header.h"
 #include "helpers.h"
 #include "ppm3.h"
+#include "ppm6.h"
 
 /**
  * Displays the usage information and returns an error exit code
@@ -69,8 +70,14 @@ int main(int argc, char* argv[]) {
                 return displayUsage();
             }
             break;
+        case 6:
+            if (!ppm6_parse_data(filePointer, &fileHeader, pixelGrid)) {
+                fprintf(stderr, "Unable to continue reading the image file.\n");
+                return displayUsage();
+            }
+            break;
         default:
-            fprintf(stderr, "Unsupported ppm type (must be P3 or P6), unable to read the image.");
+            fprintf(stderr, "Unsupported ppm type (must be P3 or P6), unable to read the image.\n");
             return displayUsage();
     }
 
@@ -104,7 +111,7 @@ int main(int argc, char* argv[]) {
             }
             break;
         default:
-            fprintf(stderr, "Unsupported output ppm type (must be P3 or P6), unable to write the image");
+            fprintf(stderr, "Unsupported output ppm type (must be P3 or P6), unable to write the image.\n");
             return displayUsage();
     }
 
