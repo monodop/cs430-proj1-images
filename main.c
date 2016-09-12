@@ -110,6 +110,12 @@ int main(int argc, char* argv[]) {
                 return displayUsage();
             }
             break;
+        case 6:
+            if (!ppm6_write_data(filePointer, &fileHeader, pixelGrid)) {
+                fprintf(stderr, "Unable to continue writing the image file.\n");
+                return displayUsage();
+            }
+            break;
         default:
             fprintf(stderr, "Unsupported output ppm type (must be P3 or P6), unable to write the image.\n");
             return displayUsage();

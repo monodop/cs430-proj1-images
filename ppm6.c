@@ -88,3 +88,42 @@ int ppm6_parse_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) 
 
     return 1;
 }
+
+int ppm6_write_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) {
+    int i, arrLength = header->imageHeight * header->imageWidth;
+    int value;
+    char nextByte;
+
+    // Write the color values
+    for (i = 0; i < arrLength; i++) {
+
+        // Red
+        value = (int)(colorGrid[i].r * header->maxVal);
+        if (header->maxVal > 255) {
+            nextByte = (char)(value >> 8);
+            fwrite(&nextByte, 1, sizeof(nextByte), filePointer);
+        }
+        nextByte = (char)(value & 0xff);
+        fwrite(&nextByte, 1, sizeof(nextByte), filePointer);
+
+        // Green
+        value = (int)(colorGrid[i].g * header->maxVal);
+        if (header->maxVal > 255) {
+            nextByte = (char)(value >> 8);
+            fwrite(&nextByte, 1, sizeof(nextByte), filePointer);
+        }
+        nextByte = (char)(value & 0xff);
+        fwrite(&nextByte, 1, sizeof(nextByte), filePointer);
+
+        // Blue
+        value = (int)(colorGrid[i].b * header->maxVal);
+        if (header->maxVal > 255) {
+            nextByte = (char)(value >> 8);
+            fwrite(&nextByte, 1, sizeof(nextByte), filePointer);
+        }
+        nextByte = (char)(value & 0xff);
+        fwrite(&nextByte, 1, sizeof(nextByte), filePointer);
+    }
+
+    return 1;
+}
