@@ -61,6 +61,11 @@ int main(int argc, char* argv[]) {
 
     // Create the pixel grid in memory
     pixelGrid = malloc(sizeof(Color) * fileHeader.imageWidth * fileHeader.imageHeight);
+    if (pixelGrid == NULL) {
+        // Unable to allocate the correct amount of memory.
+        fprintf(stderr, "Unable to allocate enough memory to read the image file. Cannot proceed.\n");
+        return displayUsage();
+    }
 
     // Read the data into the grid
     switch (fileHeader.ppmType) {
@@ -79,6 +84,11 @@ int main(int argc, char* argv[]) {
         default:
             fprintf(stderr, "Unsupported ppm type (must be P3 or P6), unable to read the image.\n");
             return displayUsage();
+    }
+
+    // Check if there is any extra data at the end of the file
+    if (getc(filePointer) != EOF) {
+        fprintf(stderr, "Warning: extra data detected in file. This data will be ignored.\n");
     }
 
     // Close input file

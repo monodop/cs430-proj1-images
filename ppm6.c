@@ -5,7 +5,9 @@
 #include "ppm6.h"
 #include <ctype.h>
 
-#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM6 data. Unexpected EOF.\n"
+#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM6 data. "
+#define UNEXPECTED_EOF "Unexpected EOF.\n"
+#define INVALID_COLOR_VALUE "Color value out of bounds (must be above 0 and below the max value as defined in the header).\n"
 
 /**
  * Reads a set of 3 values from the input filestream and stores it in the provided ColorRef
@@ -21,15 +23,22 @@ int ppm6_read_triple(FILE* filePointer, int maxValue, ColorRef color) {
     c1 = getc(filePointer);
     if (c1 == EOF) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, UNEXPECTED_EOF);
         return 0;
     }
     if (maxValue > 255) {
         c2 = getc(filePointer);
         if (c2 == EOF) {
             fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+            fprintf(stderr, UNEXPECTED_EOF);
             return 0;
         }
         c1 = (c1 << 8) + c2;
+    }
+    if (c1 > maxValue) {
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_COLOR_VALUE);
+        return 0;
     }
     color->r = (double)c1 / maxValue;
 
@@ -37,15 +46,22 @@ int ppm6_read_triple(FILE* filePointer, int maxValue, ColorRef color) {
     c1 = getc(filePointer);
     if (c1 == EOF) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, UNEXPECTED_EOF);
         return 0;
     }
     if (maxValue > 255) {
         c2 = getc(filePointer);
         if (c2 == EOF) {
             fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+            fprintf(stderr, UNEXPECTED_EOF);
             return 0;
         }
         c1 = (c1 << 8) + c2;
+    }
+    if (c1 > maxValue) {
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_COLOR_VALUE);
+        return 0;
     }
     color->g = (double)c1 / maxValue;
 
@@ -53,15 +69,22 @@ int ppm6_read_triple(FILE* filePointer, int maxValue, ColorRef color) {
     c1 = getc(filePointer);
     if (c1 == EOF) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, UNEXPECTED_EOF);
         return 0;
     }
     if (maxValue > 255) {
         c2 = getc(filePointer);
         if (c2 == EOF) {
             fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+            fprintf(stderr, UNEXPECTED_EOF);
             return 0;
         }
         c1 = (c1 << 8) + c2;
+    }
+    if (c1 > maxValue) {
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_COLOR_VALUE);
+        return 0;
     }
     color->b = (double)c1 / maxValue;
 
@@ -76,6 +99,7 @@ int ppm6_parse_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) 
     c = getc(filePointer);
     if (!isspace(c)) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, "\n");
         return 0;
     }
 

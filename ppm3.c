@@ -5,7 +5,9 @@
 #include "ppm3.h"
 #include "header.h"
 
-#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM3 data. Unexpected EOF.\n"
+#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM3 data. "
+#define UNEXPECTED_EOF "Unexpected EOF.\n"
+#define INVALID_COLOR_VALUE "Color value out of bounds (must be above 0 and below the max value as defined in the header).\n"
 
 /**
  * Reads a set of 3 values from the input filestream and stores it in the provided ColorRef
@@ -16,31 +18,46 @@
  */
 int ppm3_read_triple(FILE* filePointer, unsigned short maxValue, ColorRef color) {
     int count;
-    unsigned short nextValue;
+    int nextValue;
 
     // Red
     skip_ignored_characters(filePointer);
-    count = fscanf(filePointer, "%hu", &nextValue);
+    count = fscanf(filePointer, "%d", &nextValue);
     if (count == 0 || count == EOF) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, UNEXPECTED_EOF);
+        return 0;
+    } else if (nextValue < 0 || nextValue > maxValue) {
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_COLOR_VALUE);
         return 0;
     }
     color->r = (double)nextValue / maxValue;
 
     // Green
     skip_ignored_characters(filePointer);
-    count = fscanf(filePointer, "%hu", &nextValue);
+    count = fscanf(filePointer, "%d", &nextValue);
     if (count == 0 || count == EOF) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, UNEXPECTED_EOF);
+        return 0;
+    } else if (nextValue < 0 || nextValue > maxValue) {
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_COLOR_VALUE);
         return 0;
     }
     color->g = (double)nextValue / maxValue;
 
     // Blue
     skip_ignored_characters(filePointer);
-    count = fscanf(filePointer, "%hu", &nextValue);
+    count = fscanf(filePointer, "%d", &nextValue);
     if (count == 0 || count == EOF) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, UNEXPECTED_EOF);
+        return 0;
+    } else if (nextValue < 0 || nextValue > maxValue) {
+        fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
+        fprintf(stderr, INVALID_COLOR_VALUE);
         return 0;
     }
     color->b = (double)nextValue / maxValue;
@@ -57,6 +74,8 @@ int ppm3_parse_data(FILE* filePointer, PpmHeaderRef header, ColorRef colorGrid) 
             return 0;
         }
     }
+
+    skip_ignored_characters(filePointer);
 
     return 1;
 }

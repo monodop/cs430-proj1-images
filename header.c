@@ -13,8 +13,7 @@
 
 int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     int nextChar, count;
-    unsigned int nextNumber;
-    unsigned short nextShort;
+    int nextNumber;
 
     // Check first part of magic number
     nextChar = getc(filePointer);
@@ -38,33 +37,33 @@ int header_read(FILE* filePointer, PpmHeaderRef headerData) {
 
     // Get the image width
     skip_ignored_characters(filePointer);
-    count = fscanf(filePointer, "%u", &nextNumber);
-    if (count == 0 || count == EOF) {
+    count = fscanf(filePointer, "%d", &nextNumber);
+    if (count == 0 || count == EOF || nextNumber <= 0) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
         fprintf(stderr, INVALID_WIDTH_ERROR_MESSAGE);
         return 0;
     }
-    headerData->imageWidth = nextNumber;
+    headerData->imageWidth = (unsigned int)nextNumber;
 
     // Get the image height
     skip_ignored_characters(filePointer);
-    count = fscanf(filePointer, "%u", &nextNumber);
-    if (count == 0 || count == EOF) {
+    count = fscanf(filePointer, "%d", &nextNumber);
+    if (count == 0 || count == EOF || nextNumber <= 0) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
         fprintf(stderr, INVALID_HEIGHT_ERROR_MESSAGE);
         return 0;
     }
-    headerData->imageHeight = nextNumber;
+    headerData->imageHeight = (unsigned int)nextNumber;
 
     // Get the image max value
     skip_ignored_characters(filePointer);
-    count = fscanf(filePointer, "%hu", &nextShort);
-    if (count == 0 || count == EOF) {
+    count = fscanf(filePointer, "%d", &nextNumber);
+    if (count == 0 || count == EOF || nextNumber <= 0 || nextNumber > 65535) {
         fprintf(stderr, INVALID_FILE_ERROR_MESSAGE);
         fprintf(stderr, INVALID_MAXVAL_ERROR_MESSAGE);
         return 0;
     }
-    headerData->maxVal = nextShort;
+    headerData->maxVal = (unsigned short)nextNumber;
     return 1;
 }
 
@@ -74,10 +73,10 @@ int header_write(FILE* filePointer, PpmHeaderRef headerData) {
     fprintf(filePointer, "P%d\n", headerData->ppmType);
 
     // Write length and width
-    fprintf(filePointer, "%d %d\n", headerData->imageWidth, headerData->imageHeight);
+    fprintf(filePointer, "%u %u\n", headerData->imageWidth, headerData->imageHeight);
 
     // Write max value
-    fprintf(filePointer, "%d\n", headerData->maxVal);
+    fprintf(filePointer, "%hu\n", headerData->maxVal);
 
     return 1;
 }
