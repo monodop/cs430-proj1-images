@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     // Validate target format parameter
     targetFormat = atoi(argv[1]);
     if (targetFormat != 3 && targetFormat != 6) {
-        fprintf(stderr, "Invalid parameter target_format = '%s', expected 3 or 6.\n", argv[1]);
+        fprintf(stderr, "Error: Invalid parameter target_format = '%s', expected 3 or 6.\n", argv[1]);
         return displayUsage();
     }
 
@@ -44,13 +44,13 @@ int main(int argc, char* argv[]) {
     printf("Processing input file.\n");
     filePointer = fopen(inputFilename, "r");
     if (filePointer == NULL) {
-        fprintf(stderr, "File '%s' does not exist or cannot be opened. Error number %d.\n", inputFilename, errno);
+        fprintf(stderr, "Error: File '%s' does not exist or cannot be opened. Error number %d.\n", inputFilename, errno);
         return displayUsage();
     }
 
     // Read input image file's headers
     if (!header_read(filePointer, &fileHeader)) {
-        fprintf(stderr, "Unable to continue processing image file.\n");
+        fprintf(stderr, "Error: Unable to continue processing image file.\n");
         return displayUsage();
     }
     printf("Detected file with dimensions %u x %u of type P%d, maxval=%hu.\n",
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     pixelGrid = malloc(sizeof(Color) * fileHeader.imageWidth * fileHeader.imageHeight);
     if (pixelGrid == NULL) {
         // Unable to allocate the correct amount of memory.
-        fprintf(stderr, "Unable to allocate enough memory to read the image file. Cannot proceed.\n");
+        fprintf(stderr, "Error: Unable to allocate enough memory to read the image file. Cannot proceed.\n");
         return displayUsage();
     }
 
@@ -71,18 +71,18 @@ int main(int argc, char* argv[]) {
     switch (fileHeader.ppmType) {
         case 3:
             if (!ppm3_parse_data(filePointer, &fileHeader, pixelGrid)) {
-                fprintf(stderr, "Unable to continue reading the image file.\n");
+                fprintf(stderr, "Error: Unable to continue reading the image file.\n");
                 return displayUsage();
             }
             break;
         case 6:
             if (!ppm6_parse_data(filePointer, &fileHeader, pixelGrid)) {
-                fprintf(stderr, "Unable to continue reading the image file.\n");
+                fprintf(stderr, "Error: Unable to continue reading the image file.\n");
                 return displayUsage();
             }
             break;
         default:
-            fprintf(stderr, "Unsupported ppm type (must be P3 or P6), unable to read the image.\n");
+            fprintf(stderr, "Error: Unsupported ppm type (must be P3 or P6), unable to read the image.\n");
             return displayUsage();
     }
 
@@ -101,14 +101,14 @@ int main(int argc, char* argv[]) {
     printf("Opening output file for writing.\n");
     filePointer = fopen(outputFilename, "w+");
     if (filePointer == NULL) {
-        fprintf(stderr, "File '%s' cannot be opened for writing. Error number %d.\n", outputFilename, errno);
+        fprintf(stderr, "Error: File '%s' cannot be opened for writing. Error number %d.\n", outputFilename, errno);
         return displayUsage();
     }
 
     // Write output image file's headers
     fileHeader.ppmType = (char)targetFormat;
     if (!header_write(filePointer, &fileHeader)) {
-        fprintf(stderr, "Unable to write to image file. Operation aborted.\n");
+        fprintf(stderr, "Error: Unable to write to image file. Operation aborted.\n");
         return displayUsage();
     }
 
@@ -116,18 +116,18 @@ int main(int argc, char* argv[]) {
     switch (targetFormat) {
         case 3:
             if (!ppm3_write_data(filePointer, &fileHeader, pixelGrid)) {
-                fprintf(stderr, "Unable to continue writing the image file.\n");
+                fprintf(stderr, "Error: Unable to continue writing the image file.\n");
                 return displayUsage();
             }
             break;
         case 6:
             if (!ppm6_write_data(filePointer, &fileHeader, pixelGrid)) {
-                fprintf(stderr, "Unable to continue writing the image file.\n");
+                fprintf(stderr, "Error: Unable to continue writing the image file.\n");
                 return displayUsage();
             }
             break;
         default:
-            fprintf(stderr, "Unsupported output ppm type (must be P3 or P6), unable to write the image.\n");
+            fprintf(stderr, "Error: Unsupported output ppm type (must be P3 or P6), unable to write the image.\n");
             return displayUsage();
     }
 

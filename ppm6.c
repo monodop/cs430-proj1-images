@@ -5,7 +5,7 @@
 #include "ppm6.h"
 #include <ctype.h>
 
-#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM6 data. "
+#define INVALID_FILE_ERROR_MESSAGE "Error: Unable to read PPM6 data. "
 #define UNEXPECTED_EOF "Unexpected EOF.\n"
 #define INVALID_COLOR_VALUE "Color value out of bounds (must be above 0 and below the max value as defined in the header).\n"
 

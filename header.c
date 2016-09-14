@@ -6,10 +6,10 @@
 #include "header.h"
 #include "helpers.h"
 
-#define INVALID_FILE_ERROR_MESSAGE "Unable to read PPM headers. The provided file is either not a PPM P3/P6 file or has been corrupted.\n"
-#define INVALID_WIDTH_ERROR_MESSAGE "PPM file contained an invalid width.\n"
-#define INVALID_HEIGHT_ERROR_MESSAGE "PPM file contained an invalid height.\n"
-#define INVALID_MAXVAL_ERROR_MESSAGE "PPM file contained an invalid max value.\n"
+#define INVALID_FILE_ERROR_MESSAGE "Error: Unable to read PPM headers. The provided file is either not a PPM P3/P6 file or has been corrupted.\n"
+#define INVALID_WIDTH_ERROR_MESSAGE "Error: PPM file contained an invalid width.\n"
+#define INVALID_HEIGHT_ERROR_MESSAGE "Error: PPM file contained an invalid height.\n"
+#define INVALID_MAXVAL_ERROR_MESSAGE "Error: PPM file contained an invalid max value.\n"
 
 int header_read(FILE* filePointer, PpmHeaderRef headerData) {
     int nextChar, count;
